@@ -1,5 +1,7 @@
 import { setupENS } from '@ensdomains/ui'
 import { isENSReadyReactive } from '../reactiveVars'
+import { Contract, ethers } from 'ethers'
+import { ETHRegistrarController as permanentRegistrarControllerContract } from '@ensdomains/ens-contracts'
 
 let ens = {},
   registrar = {},
@@ -32,6 +34,13 @@ export async function setup({
 }
 
 export function getRegistrar() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const signer = provider.getSigner()
+  registrar.permanentRegistrarController = new Contract(
+    '0x283af0b28c62c092c9727f1ee09c02ca627eb7f5',
+    permanentRegistrarControllerContract,
+    signer
+  )
   return registrar
 }
 
